@@ -79,11 +79,19 @@ namespace HashtagDetectorSample.Behaviors
                     var hashTagSpans = bindable.FormattedText.Spans.Where(p => Regex.Match(p.Text, Pattern).Success);
                     foreach (var span in hashTagSpans)
                     {
-                        span.GestureRecognizers.Add(new TapGestureRecognizer()
+                        var tapRecognizer = span.GestureRecognizers.FirstOrDefault() as TapGestureRecognizer;
+                        if (tapRecognizer != null)
                         {
-                            Command = Command,
-                            CommandParameter = span.Text
-                        });
+                            tapRecognizer.Command = Command;
+                        }
+                        else
+                        {
+                            span.GestureRecognizers.Add(new TapGestureRecognizer()
+                            {
+                                Command = Command,
+                                CommandParameter = span.Text
+                            });
+                        }
                     }
                 }
             }
